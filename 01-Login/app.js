@@ -1,58 +1,58 @@
 $(document).ready(function() {
-  
-  var lock = new Auth0Lock(AUTH0_CLIENT_ID, AUTH0_DOMAIN, {
-    auth: {
-      params: { scope: 'openid email' } //Details: https://auth0.com/docs/scopes
-    }
+
+  $('#logged-in-message').hide();
+  $('.btn-logout').hide();
+
+  var auth0 = new Auth0({
+    domain: AUTH0_DOMAIN,
+    clientID: AUTH0_CLIENT_ID,
+    callbackURL: AUTH0_CALLBACK_URL
   });
+
+  // make this a truly random string
+  // for production applications
+  var nonce = 'randomstring';
+
+  var authResult = auth0.parseHash(window.location.hash, {
+    nonce: nonce
+  });
+
+  if (authResult && authResult.accessToken && authResult.idToken) {
+    window.location.hash = '';
+    localStorage.setItem('access_token', authResult.accessToken);
+    localStorage.setItem('id_token', authResult.idToken);
+    $('#login-message').hide();
+    $('#logged-in-message').show();
+    $('.btn-login').hide();
+    $('.btn-logout').show();
+  }
 
   $('.btn-login').click(function(e) {
     e.preventDefault();
-    lock.show();
+    login();
   });
 
   $('.btn-logout').click(function(e) {
     e.preventDefault();
     logout();
-  })
-
-  lock.on("authenticated", function(authResult) {
-    lock.getProfile(authResult.idToken, function(error, profile) {
-      if (error) {
-        // Handle error
-        return;
-      }
-      localStorage.setItem('id_token', authResult.idToken);
-      // Display user information
-      show_profile_info(profile);
-    });
   });
 
-  //retrieve the profile:
-  var retrieve_profile = function() {
-    var id_token = localStorage.getItem('id_token');
-    if (id_token) {
-      lock.getProfile(id_token, function (err, profile) {
-        if (err) {
-          return alert('There was an error getting the profile: ' + err.message);
-        }
-        // Display user information
-        show_profile_info(profile);
-      });
-    }
-  };
-
-  var show_profile_info = function(profile) {
-     $('.nickname').text(profile.nickname);
-     $('.btn-login').hide();
-     $('.avatar').attr('src', profile.picture).show();
-     $('.btn-logout').show();
-  };
+  function login() {
+    auth0.login({
+      responseType: 'token id_token',
+      scope: 'openid',
+      audience: 'https://api.test.com',
+      nonce: nonce
+    });
+  }
 
   var logout = function() {
+    localStorage.removeItem('access_token');
     localStorage.removeItem('id_token');
     window.location.href = "/";
+    $('#login-message').show();
+    $('#logged-in-message').hide();
+    $('.btn-login').show();
+    $('.btn-logout').hide();
   };
-
-  retrieve_profile();
 });

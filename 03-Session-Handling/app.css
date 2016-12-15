@@ -11,6 +11,23 @@ body {
     text-align: center;
 }
 
+.panel-body label {
+  color: #333;
+}
+
+.panel-body h3 {
+  margin-top: 0;
+}
+
 #btn-logout {
   display: none;
+}
+
+.profile-area {
+  margin-top: 15px;
+}
+
+.profile-area img {
+  max-width: 150px;
+  margin-bottom: 20px;
 }

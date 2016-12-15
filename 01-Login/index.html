@@ -4,19 +4,19 @@
     <title>Auth0-jQuery</title>
     <meta charset="utf-8">
     <script src="//code.jquery.com/jquery-3.1.0.min.js"></script>
-
-    <!-- Auth0 lock script -->
-    <script src="//cdn.auth0.com/js/lock/10.3.0/lock.min.js"></script>
-
+    <script src="//cdn.auth0.com/w2/auth0-7.5.min.js"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
     <script src="auth0-variables.js"></script>
     <script src="app.js"></script>
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
   </head>
   <body>
-    <img alt="avatar" class="avatar" style="display:none;">
-    <p>Welcome <span class="nickname"></span></p>
-    <button type="submit" class="btn-login">Sign In</button>
-    <button type="submit" class="btn-logout" style="display:none;">Sign Out</button>
+    <div class="container">
+      <h3 id="login-message">Welcome, please log in.</h3>
+      <h3 id="logged-in-message">Thanks for logging in!</h3>
+      <button class="btn btn-primary btn-login">Log In</button>
+      <button class="btn btn-primary btn-logout">Log Out</button>
+    </div>
   </body>
 </html>

@@ -1,6 +1,6 @@
 $(document).ready(function() {
-  var auth0 = null;
-  auth0 = new Auth0({
+  
+  var auth0 = new Auth0({
     domain: AUTH0_DOMAIN,
     clientID: AUTH0_CLIENT_ID,
     callbackOnLocationHash: true,

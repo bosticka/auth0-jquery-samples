@@ -4,8 +4,8 @@
   <title>Auth0-jQuery</title>
   <meta charset="utf-8">
   <script src="//code.jquery.com/jquery-3.1.0.min.js"></script>
-  <!-- Auth0 Lock script -->
-  <script src="http://cdn.auth0.com/js/lock/10.3.0/lock.min.js"></script>
+  <script src="//cdn.auth0.com/w2/auth0-7.6.min.js"></script>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
 
   <script src="./auth0-variables.js"></script>
   <script src="./app.js"></script>
@@ -14,12 +14,26 @@
   <link rel="stylesheet" href="./app.css">
 </head>
 <body>
-  <div class="centered">
-    <p>Session Handling</p>
-  </div>
-  <div class="centered">
-    <button class="btn btn-primary btn-margin" id="btn-login">Log In</button>
-    <button class="btn btn-primary btn-margin" id="btn-logout">Log Out</button>
+  <div class="container">
+    <h3 id="login-message">Welcome, please log in.</h3>
+    <h3 id="logged-in-message">Thanks for logging in!</h3>
+    <button class="btn btn-primary btn-login">Log In</button>
+    <button class="btn btn-primary btn-logout">Log Out</button>
+    <div class="panel panel-default profile-area">
+      <div class="panel-heading"><h3>Profile</h3></div>
+      <div class="panel-body">
+        <img src="" class="avatar" alt="avatar">
+        <div>
+          <label><i class="glyphicon glyphicon-user"></i> Nickname</label>
+          <h3 class="nickname"></h3>
+        </div>
+        <div>
+          <label><i class="glyphicon glyphicon-envelope"></i> Email</label>
+          <h3 class="email"></h3>
+        </div>
+        <pre class="full-profile"></pre>
+      </div>
+    </div>
   </div>
 </body>
 </html>
