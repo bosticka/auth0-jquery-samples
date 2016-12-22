@@ -3,22 +3,15 @@ $(document).ready(function() {
   $('#logged-in-message').hide();
   $('.btn-logout').hide();
 
-  var auth0 = new Auth0({
+  var auth = new auth0.WebAuth({
     domain: AUTH0_DOMAIN,
     clientID: AUTH0_CLIENT_ID,
     callbackURL: AUTH0_CALLBACK_URL
   });
 
-  // make this a truly random string
-  // for production applications
-  var nonce = 'randomstring';
-
-  var authResult = auth0.parseHash(window.location.hash, {
-    nonce: nonce
-  });
+  var authResult = auth.parseHash(window.location.hash);
 
   if (authResult && authResult.accessToken && authResult.idToken) {
-    window.location.hash = '';
     localStorage.setItem('access_token', authResult.accessToken);
     localStorage.setItem('id_token', authResult.idToken);
     $('#login-message').hide();
@@ -38,11 +31,10 @@ $(document).ready(function() {
   });
 
   function login() {
-    auth0.login({
-      responseType: 'token id_token',
+    auth.login({
+      responseType: 'token',
       scope: 'openid',
-      audience: 'https://api.test.com',
-      nonce: nonce
+      redirectUri: window.location.href
     });
   }
 

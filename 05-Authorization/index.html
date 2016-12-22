@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Auth0-jQuery</title>
+  <meta charset="utf-8">
+  <script src="bower_components/jquery/dist/jquery.js"></script>
+  <script src="bower_components/auth0.js/build/auth0.js"></script>
+  <script src="bower_components/jwt-decode/build/jwt-decode.js"></script>
+  <link href="bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
+
+  <script src="auth0-variables.js"></script>
+  <script src="util.js"></script>
+  <script src="app.js"></script>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="app.css">
+</head>
+<body>
+  <div class="container">
+    <h3 id="login-message">Welcome, please log in.</h3>
+    <h3 id="logged-in-message">Thanks for logging in!</h3>
+    
+    <button class="btn btn-primary btn-login">Log In</button>
+    <button class="btn btn-primary btn-logout">Log Out</button>
+
+    <a href="/user.html" id="btn-go-user" class="btn btn-default">Go to User Page</a>
+    <a href="/admin.html" id="btn-go-admin" class="btn btn-default">Go to Admin Page</a>
+    
+    <div class="panel panel-default profile-area">
+      <div class="panel-heading"><h3>Profile</h3></div>
+      <div class="panel-body">
+        <img src="" class="avatar" alt="avatar">
+        <div>
+          <label><i class="glyphicon glyphicon-user"></i> Nickname</label>
+          <h3 class="nickname"></h3>
+        </div>
+        <div>
+          <label><i class="glyphicon glyphicon-envelope"></i> Email</label>
+          <h3 class="email"></h3>
+        </div>
+        <div>
+          <label><i class="glyphicon glyphicon-user"></i> Role</label>
+          <h3 class="role"></h3>
+        </div>
+        <pre class="full-profile"></pre>
+      </div>
+    </div>
+
+    <div class="panel panel-default profile-area">
+      <div class="panel-heading"><h3>Call an API</h3></div>
+      <div class="panel-body">
+        <p>After logging in, you will receive a JWT access token which may be used to call your API. A small Node server is provided in this sample, but you may use any server you like. Access tokens are signed with RS256 and should be decoded against your JWKS (JSON Web Key Set).</p>
+        <p>To run the Node server, make sure you have Node and npm installed, then install the dependencies and serve the API:</p>
+        <pre>npm install<br>node server.js</pre>        
+        <p>The access token gets attached to XHR requests by configuring <code>$.ajaxSetup</code> in <code>app.js</code>. The buttons below call the Node API with jQuery's <code>$.get</code> and the calls go to <code>localhost:3001/api/public</code> and <code>localhost:3001/api/private</code> respectively. The <code>$.get</code> call in <code>app.js</code> can be adjusted to send requests to other URLs as desired.</p>
+        <div class="access-token-area">
+          <h4>Your Access Token</h4>
+          <pre></pre>
+        </div>
+        <div class="calling-api-area">
+          <div class="text-center">
+            <button class="btn btn-primary btn-lg btn-call-public">Call Public Endpoint</button>
+            <button class="btn btn-danger btn-lg btn-call-private">Call Private Endpoint</button>
+            <h3 class="api-call-result"></h3>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+

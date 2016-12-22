@@ -3,27 +3,20 @@ $(document).ready(function() {
   var btn_login = $('.btn-login');
   var btn_logout = $('.btn-logout');
 
-  var auth0 = new Auth0({
+  var auth = new auth0.WebAuth({
     domain: AUTH0_DOMAIN,
-    clientID: AUTH0_CLIENT_ID,
-    callbackURL: AUTH0_CALLBACK_URL
+    clientID: AUTH0_CLIENT_ID
   });
-  
-  // make this a truly random string
-  // for production applications
-  var nonce = 'randomstring';
 
-  var authResult = auth0.parseHash(window.location.hash, {
-    nonce: nonce
-  });
+  var authResult = auth.parseHash(window.location.hash);
 
   var idToken = localStorage.getItem('id_token') || null;
   var profile = localStorage.getItem('profile') || null;
 
-  if (idToken) {
-    useLoggedInScenario();
+  if (idToken && !isTokenExpired(idToken)) {
+    userIsAuthenticated();
   } else {
-    useLoggedOutScenario();
+    userIsNotAuthenticated();
   }
 
   if (profile) {
@@ -37,7 +30,7 @@ $(document).ready(function() {
     if (!profile) {
       getProfile(authResult.accessToken);
     }
-    useLoggedInScenario();
+    userIsAuthenticated();
   }
 
   btn_login.click(function(e) {
@@ -51,10 +44,11 @@ $(document).ready(function() {
   });
 
   function login() {
-    auth0.login({
+    auth.login({
       responseType: 'token id_token',
-      scope: 'openid',
-      nonce: nonce
+      scope: 'openid profile',
+      audience: 'https://' + AUTH0_DOMAIN + '/userinfo',
+      redirectUri: window.location.href
     });
   }
 
@@ -62,12 +56,12 @@ $(document).ready(function() {
     localStorage.removeItem('access_token');
     localStorage.removeItem('id_token');
     localStorage.removeItem('profile');
-    useLoggedOutScenario();
+    userIsNotAuthenticated();
     window.location.href = "/";
   }
   
   function getProfile(accessToken) {
-    auth0.getUserInfo(accessToken, function(err, profile) {
+    auth.client.userInfo(accessToken, function(err, profile) {
       if (err) { 
         console.log(error);
         return;
@@ -77,6 +71,10 @@ $(document).ready(function() {
     });
   }
 
+  function isTokenExpired(token) {
+    return jwt_decode(token).exp < Date.now() / 1000;
+  }
+
   function displayProfile(profile) {
     $('.avatar').attr('src', profile.picture);
     $('.nickname').text(profile.nickname);
@@ -84,7 +82,7 @@ $(document).ready(function() {
     $('.full-profile').text(JSON.stringify(profile, null, 2));
   }
 
-  function useLoggedInScenario() {
+  function userIsAuthenticated() {
     $('#login-message').hide();
     $('#logged-in-message').show();
     $('.btn-login').hide();
@@ -92,7 +90,7 @@ $(document).ready(function() {
     $('.profile-area').show();
   }
   
-  function useLoggedOutScenario() {
+  function userIsNotAuthenticated() {
     $('#login-message').show();
     $('#logged-in-message').hide();
     $('.btn-login').show();
