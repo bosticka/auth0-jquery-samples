@@ -1,8 +1,8 @@
 $(document).ready(function() {
 
   var btnLogin = $('#btn-login');
-  var btnLogout = $('#btn-logout');
   var btnSignup = $('#btn-signup');
+  var btnLogout = $('#btn-logout');
   var btnGoogle = $('#btn-google');
   
   var auth = new auth0.WebAuth({
@@ -12,7 +12,7 @@ $(document).ready(function() {
 
   var authResult = auth.parseHash(window.location.hash);
 
-  if (authResult && authResult.idToken) {
+  if (authResult && authResult.accessToken && authResult.idToken) {
     window.location.hash = '';
     localStorage.setItem('access_token', authResult.accessToken);
     localStorage.setItem('id_token', authResult.idToken);
