@@ -1,12 +1,10 @@
 $(document).ready(function() {
   
-  var btn_login = $('.btn-login');
-  var btn_logout = $('.btn-logout');
-  var btn_call_public = $('.btn-call-public');
-  var btn_call_private = $('.btn-call-private');
+  var btnLogin = $('.btn-login');
+  var btnLogout = $('.btn-logout');
+  var getItemsButton = $('.btn-get-items');
 
-  var publicEndpoint = 'http://localhost:3001/api/public';
-  var privateEndpoint = 'http://localhost:3001/api/private';
+  var itemsEndpoint = 'http://localhost:3001/api/items';
 
   var auth = new auth0.WebAuth({
     domain: AUTH0_DOMAIN,
@@ -19,11 +17,10 @@ $(document).ready(function() {
   var accessToken = localStorage.getItem('access_token') || null;
   var profile = localStorage.getItem('profile') || null;
 
-  if (profile) {
-    displayProfile(JSON.parse(profile), idToken);
-  }
-
   if (idToken && !isTokenExpired(idToken)) {
+    if (profile) {
+      displayProfile(JSON.parse(profile), idToken);
+    }
     userIsAuthenticated();
   } else {
     userIsNotAuthenticated();
@@ -44,29 +41,20 @@ $(document).ready(function() {
     userIsAuthenticated();
   }
 
-  btn_login.click(function(e) {
+  btnLogin.click(function(e) {
     e.preventDefault();
     login();
   });
 
-  btn_logout.click(function(e) {
+  btnLogout.click(function(e) {
     e.preventDefault();
     logout();
   });
 
-  btn_call_public.click(function(e) {
+  getItemsButton.click(function(e) {
     e.preventDefault();
-    $.get(publicEndpoint).done(function(data) {
-      $('.api-call-result').text(data.message);
-    }).fail(function(error) {
-      $('.api-call-result').text(error.statusText);
-    });
-  });
-
-  btn_call_private.click(function(e) {
-    e.preventDefault();
-    $.get(privateEndpoint).done(function(data) {
-      $('.api-call-result').text(data.message);
+    $.get(itemsEndpoint).done(function(data) {
+      $('.api-call-result').text(data.items);
     }).fail(function(error) {
       $('.api-call-result').text(error.statusText);
     });
@@ -75,7 +63,7 @@ $(document).ready(function() {
   function login() {
     auth.login({
       responseType: 'token id_token',
-      scope: 'openid profile',
+      scope: 'openid profile read:items',
       audience: 'https://api.test.com',
       redirectUri: window.location.href
     });
@@ -84,6 +72,7 @@ $(document).ready(function() {
   function logout() {
     localStorage.removeItem('access_token');
     localStorage.removeItem('id_token');
+    localStorage.removeItem('profile');
     userIsNotAuthenticated();
     window.location.href = "/";
   }
@@ -117,6 +106,7 @@ $(document).ready(function() {
     $('.btn-login').hide();
     $('.btn-logout').show();
     $('.access-token-area').show();
+    $('.profile-area').show();
   }
   
   function userIsNotAuthenticated() {
@@ -125,10 +115,12 @@ $(document).ready(function() {
     $('.btn-login').show();
     $('.btn-logout').hide();
     $('.access-token-area').hide();
+    $('.profile-area').hide();
   }
 
   function route() {
     var currentLocation = window.location.pathname;
+    var idToken = localStorage.getItem('id_token');
     if (idToken && !isTokenExpired(idToken)) {
 
       var role = getRole(idToken);
@@ -139,32 +131,25 @@ $(document).ready(function() {
           if (role === 'admin' || role === 'user') { $('#btn-go-user').show(); }
           break;
         case "/user.html":
-          if (getRole(idToken) !== ('user' || 'admin')) {
+          if (!(role === 'admin' || role === 'user')) {
             window.location.href = "/";
-          } else {
-            $('.container').show();
-            $('#btn-logout').show();
-            $('#nickname').text(profile.nickname);
           }
           break;
         case "/admin.html":
-          if (getRole(idToken) !== 'admin') {
+          if (role !== 'admin') {
             window.location.href = "/";
-          } else {
-            $('.container').show();
-            $('#btn-logout').show();
-            $('#nickname').text(profile.nickname);
           }
           break;
       }
       
     } else {
-      // user is not logged in.
-      // Call logout just to be sure our local session is cleaned up.
+      // User is not logged in.
+      // Call logout just to be sure the local session is cleaned up
       if (currentLocation !== '/') {
         logout();
       }
     }
   }
+
   route();
 });

@@ -1,9 +1,9 @@
 $(document).ready(function() {
   
-  var btn_login = $('.btn-login');
-  var btn_logout = $('.btn-logout');
-  var btn_call_public = $('.btn-call-public');
-  var btn_call_private = $('.btn-call-private');
+  var btnLogin = $('.btn-login');
+  var btnLogout = $('.btn-logout');
+  var btnCallPublic = $('.btn-call-public');
+  var btnCallPrivate = $('.btn-call-private');
 
   var publicEndpoint = 'http://localhost:3001/api/public';
   var privateEndpoint = 'http://localhost:3001/api/private';
@@ -36,17 +36,17 @@ $(document).ready(function() {
     userIsAuthenticated();
   }
 
-  btn_login.click(function(e) {
+  btnLogin.click(function(e) {
     e.preventDefault();
     login();
   });
 
-  btn_logout.click(function(e) {
+  btnLogout.click(function(e) {
     e.preventDefault();
     logout();
   });
 
-  btn_call_public.click(function(e) {
+  btnCallPublic.click(function(e) {
     e.preventDefault();
     $.get(publicEndpoint).done(function(data) {
       $('.api-call-result').text(data.message);
@@ -55,7 +55,7 @@ $(document).ready(function() {
     });
   });
 
-  btn_call_private.click(function(e) {
+  btnCallPrivate.click(function(e) {
     e.preventDefault();
     $.get(privateEndpoint).done(function(data) {
       $('.api-call-result').text(data.message);

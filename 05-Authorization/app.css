@@ -15,10 +15,6 @@ body {
   color: #333;
 }
 
-#btn-logout {
-  display: none;
-}
-
 .profile-area {
   margin-top: 15px;
 }
@@ -28,10 +24,10 @@ body {
   margin-bottom: 20px;
 }
 
-#btn-logout, #btn-go-admin, #btn-go-user, .profile-container {
-  display: none;
-}
-
 .panel-body h3 {
   margin-top: 0;
+}
+
+.panel {
+  margin-top: 15px;
 }

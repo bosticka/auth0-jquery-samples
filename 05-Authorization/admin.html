@@ -3,20 +3,43 @@
 <head>
   <title>Auth0-jQuery</title>
   <meta charset="utf-8">
-  <link href="./app.css" rel="stylesheet">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <script src="./app.js"></script>
+  <link href="bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
+  <link href="app.css" rel="stylesheet">
 </head>
 <body>
-  <div class="container profile-container" style="display: none;">
-    <div id="login" class="row">
-      <div class="col-md-12">
-        <p>Welcome <span id="nickname"></span> (admin)</p>
+  <div class="container">
+
+    <div class="panel panel-default">
+      <div class="panel-heading"><h3>Welcome to the Admin Route</h3></div>
+      <div class="panel-body">
         <a href="/" class="btn btn-default">Back</a>
-        <button type="button" id="btn-logout" class="btn btn-default">Logout</button>
+        <p>For the purposes of demonstration, users with a role of <code>admin</code> are able to navigate to this route and are also able to access privileged resources from the server. To determine whether users should be allowed to access this route, the ID token is decoded and a claim called <code>role</code> is searched for. If that <code>role</code> is equal to <code>admin</code>, the user is allowed here.
+        <p>To access privileged resources from the API as an <code>admin</code>, the access token is used. Instead of setting a catch-all <code>role</code> in the access token, fine-grained <code>scopes</code> are used.</p>
+        <p>In this example, the API expects the access token to have a <code>scope</code> of <code>read:items</code>, the intent of which is to say that the user can read a list of items. Follow the steps outlined in the quickstart guide to learn how to set scopes for your access tokens.</p>
+        <h4>Running the Server</h4>
+        <p>To run the Node server, make sure you have Node and npm installed, then install the dependencies and serve the API:</p>
+        <pre>npm install<br>node server.js</pre>        
+        <p>The access token gets attached to XHR requests by configuring <code>$.ajaxSetup</code> in <code>util.js</code>. The button below calls the Node API with jQuery's <code>$.get</code> and the call goes to <code>localhost:3001/api/items</code>. The <code>$.get</code> call in <code>app.js</code> can be adjusted to send requests to other URLs as desired.</p>
+        <div class="access-token-area">
+          <h4>Your Access Token</h4>
+          <pre></pre>
+        </div>
+        <div class="calling-api-area">
+          <div class="text-center">
+            <button class="btn btn-primary btn-lg btn-get-items">Get Items</button>
+            <h3 class="api-call-result"></h3>
+          </div>
+        </div>
       </div>
     </div>
   </div>
+
+  <script src="bower_components/jquery/dist/jquery.js"></script>
+  <script src="bower_components/auth0.js/build/auth0.js"></script>
+  <script src="bower_components/jwt-decode/build/jwt-decode.js"></script>
+  <script src="auth0-variables.js"></script>
+  <script src="util.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>

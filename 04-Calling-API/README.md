@@ -1,19 +1,22 @@
-# Session Handling
+# Calling an API
 
-Show how to handle the session by storing and retrieving the session token with Auth0 + jQuery.
+This sample demonstrates how to call a protected API endpoint from a jQuery application using Auth0.
 
-You can read a quickstart guide for this sample [here](https://auth0.com/docs/quickstart/spa/jquery/03-session-handling).
+## Running the App
 
-## Before running the example
+Rename `auth0-variables.js.example` to `auth0-variables.js` and populate it with the Auth0 **client ID**, **domain**, and **callback URL**  for your application. You can find that information in the settings area for your application in the [Auth0 dashboard](https://manage.auth0.com). Make sure to add the callback URL (`http://localhost:3000/` if you are testing locally) in the **Allowed Callback URLs** section, as explained [here](https://auth0.com/docs/quickstart/spa/jquery/01-login#before-starting).
 
-Rename `auth0-variables.js.example` to `auth0-variables.js` and make sure that you have both the `Client ID` and `Client Secret`in it. You can find that information in the settings section of your Auth0 Client. Also, make sure to add the callback URL (`http://localhost:3000/` if you are testing locally) in the **Allowed Callback URLs** section, as explained [here](https://auth0.com/docs/quickstart/spa/jquery/01-login#before-starting)
+The sample provides a small Node.js serve which requires your Auth0 domain and the identifier for your API. To find the identifier for your API, first ensure that you have created on, and retrieve it from the [APIs section](https://manage.auth0.com/#/apis) of your Auth0 dashboard.
 
-## Running the example
+Rename the `.env.example` file to `.env` and provide your the domain for your application and the identifier for your API.
 
-In order to run the example you need to just start a server. What we suggest is doing the following:
+```bash
+npm install -g serve
+cd path/to/project
+bower install
+npm install
+node server.js
+serve
+```
 
-1. Install node
-2. run `npm install -g serve`
-3. run `serve` in the directory of the project.
-
-Go to `http://localhost:3000` and you'll see the app running.
+The app will be served at `http://localhost:3000`.

@@ -5,13 +5,13 @@ $(document).ready(function() {
 
   var auth = new auth0.WebAuth({
     domain: AUTH0_DOMAIN,
-    clientID: AUTH0_CLIENT_ID,
-    callbackURL: AUTH0_CALLBACK_URL
+    clientID: AUTH0_CLIENT_ID
   });
 
   var authResult = auth.parseHash(window.location.hash);
 
   if (authResult && authResult.accessToken && authResult.idToken) {
+    window.location.hash = '';
     localStorage.setItem('access_token', authResult.accessToken);
     localStorage.setItem('id_token', authResult.idToken);
     $('#login-message').hide();
@@ -32,13 +32,12 @@ $(document).ready(function() {
 
   function login() {
     auth.login({
-      responseType: 'token',
-      scope: 'openid',
-      redirectUri: window.location.href
+      responseType: 'token id_token',
+      redirectUri: AUTH0_CALLBACK_URL
     });
   }
 
-  var logout = function() {
+  function logout() {
     localStorage.removeItem('access_token');
     localStorage.removeItem('id_token');
     window.location.href = "/";
@@ -46,5 +45,5 @@ $(document).ready(function() {
     $('#logged-in-message').hide();
     $('.btn-login').show();
     $('.btn-logout').hide();
-  };
+  }
 });

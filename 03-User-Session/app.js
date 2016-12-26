@@ -12,15 +12,14 @@ $(document).ready(function() {
 
   var idToken = localStorage.getItem('id_token') || null;
   var profile = localStorage.getItem('profile') || null;
-
+  
   if (idToken && !isTokenExpired(idToken)) {
+    if (profile) {
+      displayProfile(JSON.parse(profile));
+    }
     userIsAuthenticated();
   } else {
     userIsNotAuthenticated();
-  }
-
-  if (profile) {
-    displayProfile(JSON.parse(profile));
   }
 
   if (authResult && authResult.accessToken && authResult.idToken) {

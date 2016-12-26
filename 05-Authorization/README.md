@@ -1,118 +1,22 @@
 # Authorization
 
-This example shows one of the ways of adding Authorization for a resource in your application. We have an `/admin.html` page, which is only accessible for users with an `admin` role and an `/user.html` page, only accessible for users with `user` role.
+This sample demonstrates how to call add authorization for your users with Auth0's rules pipeline.
 
-You can read a quickstart guide for this sample [here](https://auth0.com/docs/quickstart/spa/jquery/07-authorization).
+## Running the App
 
-## Before running the example
+Rename `auth0-variables.js.example` to `auth0-variables.js` and populate it with the Auth0 **client ID**, **domain**, and **callback URL**  for your application. You can find that information in the settings area for your application in the [Auth0 dashboard](https://manage.auth0.com). Make sure to add the callback URL (`http://localhost:3000/` if you are testing locally) in the **Allowed Callback URLs** section, as explained [here](https://auth0.com/docs/quickstart/spa/jquery/01-login#before-starting).
 
-Rename `auth0-variables.js.example` to `auth0-variables.js` and make sure that you have both the `Client ID` and `Client Secret`in it. You can find that information in the settings section of your Auth0 Client. Also, make sure to add the callback URL (`http://localhost:3000/` if you are testing locally) in the **Allowed Callback URLs** section, as explained [here](https://auth0.com/docs/quickstart/spa/jquery/01-login#before-starting)
+The sample provides a small Node.js serve which requires your Auth0 domain and the identifier for your API. To find the identifier for your API, first ensure that you have created on, and retrieve it from the [APIs section](https://manage.auth0.com/#/apis) of your Auth0 dashboard.
 
-## Running the example
+Rename the `.env.example` file to `.env` and provide your the domain for your application and the identifier for your API.
 
-In order to run the example you need to just start a server. What we suggest is doing the following:
-
-1. Install node
-2. run `npm install -g serve`
-3. run `serve` in the directory of the project.
-
-Go to `http://localhost:3000` and you'll see the app running :).
-
-
-# Important Snippets
-
-## 1. Add Lock dependency
-
-```html
-<!-- ===== ./index.html ===== -->
-<head>
-  ...
-  <!-- Auth0 Lock script -->
-  <script src="http://cdn.auth0.com/js/lock/10.3.0/lock.min.js"></script>
-  ...
-</head>
+```bash
+npm install -g serve
+cd path/to/project
+bower install
+npm install
+node server.js
+serve
 ```
 
-## 2. Check if user's role is `admin` or `user`
-
-```javascript
-/* ===== ./app.js ===== */
-...
-var isAdmin = function(profile) {
-  if (profile &&
-      profile.app_metadata &&
-      profile.app_metadata.roles &&
-      profile.app_metadata.roles.indexOf('admin') > -1) {
-    return true;
-  } else {
-     return false;
-  }
-};
-
-var isUser = function(profile) {
-  if (profile &&
-      profile.app_metadata &&
-      profile.app_metadata.roles &&
-      profile.app_metadata.roles.indexOf('user') > -1) {
-    return true;
-  } else {
-     return false;
-  }
-};
-...
-```
-
-## 3. Filter access
-
-```javascript
-/* ===== ./app.js ===== */
-...
-var route = function() {
-  var id_token = localStorage.getItem('id_token');
-  var current_location = window.location.pathname;
-  if (undefined != id_token) {
-    var profile = JSON.parse(localStorage.getItem('profile'));
-
-    switch(current_location) {
-      case "/":
-        $('#btn-login').hide();
-        $('#btn-logout').show();
-        if (isAdmin(profile)) { $('#btn-go-admin').show(); }
-        if (isUser(profile)) { $('#btn-go-user').show(); }
-        break;
-      case "/user.html":
-        if (true != isUser(profile)) {
-          window.location.href = "/";
-        } else {
-          $('.container').show();
-          $('#btn-logout').show();
-          $('#nickname').text(profile.nickname);
-        }
-        break;
-      case "/admin.html":
-        if (true != isAdmin(profile)) {
-          window.location.href = "/";
-        } else {
-          $('.container').show();
-          $('#btn-logout').show();
-          $('#nickname').text(profile.nickname);
-        }
-        break;
-    };
-  } else { // user is not logged in.
-    // Call logout just to be sure our local session is cleaned up.
-    if ("/" != current_location) {
-      logout();
-    }
-  }
-};
-
-var logout = function() {
-  localStorage.removeItem('id_token');
-  localStorage.removeItem('profile');
-  window.location.href = "/";
-};
-
-route();
-...
-```
+The app will be served at `http://localhost:3000`.

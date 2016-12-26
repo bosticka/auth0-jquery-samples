@@ -1,85 +1,94 @@
 $(document).ready(function() {
+
+  var btnLogin = $('#btn-login');
+  var btnLogout = $('#btn-logout');
+  var btnSignup = $('#btn-signup');
+  var btnGoogle = $('#btn-google');
   
-  var auth0 = new Auth0({
+  var auth = new auth0.WebAuth({
     domain: AUTH0_DOMAIN,
-    clientID: AUTH0_CLIENT_ID,
-    callbackOnLocationHash: true,
-    callbackURL: 'http://YOUR_APP/callback',
+    clientID: AUTH0_CLIENT_ID
   });
 
-  $('#btn-login').on('click', function(ev) {
-    ev.preventDefault();
-    var username = $('#username').val();
+  var authResult = auth.parseHash(window.location.hash);
+
+  if (authResult && authResult.idToken) {
+    window.location.hash = '';
+    localStorage.setItem('access_token', authResult.accessToken);
+    localStorage.setItem('id_token', authResult.idToken);
+    userIsAuthenticated();
+  } else {
+    userIsNotAuthenticated();
+  }
+
+  btnLogin.on('click', function(e) {
+    e.preventDefault();
+    var email = $('#email').val();
     var password = $('#password').val();
-    auth0.login({
+
+    auth.login({
       connection: 'Username-Password-Authentication',
-      responseType: 'token',
-      email: username,
+      responseType: 'token id_token',
+      redirectUri: AUTH0_CALLBACK_URL,
+      email: email,
       password: password,
     }, function(err) {
       if (err) {
-        alert("something went wrong: " + err.message);
-      } else {
-        show_logged_in(username);
+        alert(err.description);
       }
     });
   });
 
-  $('#btn-register').on('click', function(ev) {
-    ev.preventDefault();
-    var username = $('#username').val();
+  btnSignup.on('click', function(e) {
+    e.preventDefault();
+    var email = $('#email').val();
     var password = $('#password').val();
-    auth0.signup({
+
+    auth.signup({
       connection: 'Username-Password-Authentication',
-      responseType: 'token',
-      email: username,
-      password: password,
-    }, function(err) {
-      if (err) alert("something went wrong: " + err.message);
+      responseType: 'token id_token',
+      redirectUri: AUTH0_CALLBACK_URL,
+      email: email,
+      password: password
+    }, function(err, user) {
+      if (err) {
+        alert(err.description);
+        return;
+      }
+      console.log(user);
     });
   });
 
-  $('#btn-google').on('click', function(ev) {
-    ev.preventDefault();
-    auth0.login({
-      connection: 'google-oauth2'
+  btnGoogle.on('click', function(e) {
+    e.preventDefault();
+    auth.login({
+      connection: 'google-oauth2',
+      responseType: 'token id_token',
+      redirectUri: AUTH0_CALLBACK_URL,
     }, function(err) {
-      if (err) alert("something went wrong: " + err.message);
+      if (err) {
+        alert(err.description);
+      }
     });
   });
 
-  $('#btn-logout').on('click', function(ev) {
-     ev.preventDefault();
+  btnLogout.on('click', function(e) {
+     e.preventDefault();
+     localStorage.removeItem('access_token');
      localStorage.removeItem('id_token');
      window.location.href = "/";
-  })
+  });
 
-  var show_logged_in = function(username) {
-    $('form.form-signin').hide();
-    $('div.logged-in').show();
-  };
+  function userIsAuthenticated() {
+    $('.login-form').hide();
+    $('#logged-in-message').show();
+    $('#log-in-message').hide();
+  }
 
-  var show_sign_in = function() {
-    $('div.logged-in').hide();
-    $('form.form-signin').show();
-  };
-
-  var parseHash = function() {
-    var token = localStorage.getItem('id_token');
-    if (null != token) {
-      show_logged_in();
-    } else {
-      var result = auth0.parseHash(window.location.hash);
-      if (result && result.idToken) {
-        localStorage.setItem('id_token', result.idToken);
-        show_logged_in();
-      } else if (result && result.error) {
-        alert('error: ' + result.error);
-        show_sign_in();
-      }
-    }
-  };
-
-  parseHash();
+  function userIsNotAuthenticated() {
+    $('.login-form').show();
+    $('#logged-in-message').hide();
+    $('#log-in-message').show();
+  }
 
 });

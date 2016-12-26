@@ -19,11 +19,6 @@ body {
   display: none;
 }
 
-.profile-area {
+.panel {
   margin-top: 15px;
-}
-
-.profile-area img {
-  max-width: 150px;
-  margin-bottom: 20px;
 }
