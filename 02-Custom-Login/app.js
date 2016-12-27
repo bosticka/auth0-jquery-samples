@@ -30,6 +30,7 @@ $(document).ready(function() {
       connection: 'Username-Password-Authentication',
       responseType: 'token id_token',
       redirectUri: AUTH0_CALLBACK_URL,
+      audience: 'https://' + AUTH0_DOMAIN + '/userinfo',
       email: email,
       password: password,
     }, function(err) {
