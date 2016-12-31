@@ -1,7 +1,7 @@
 $(document).ready(function() {
   
-  var btn_login = $('.btn-login');
-  var btn_logout = $('.btn-logout');
+  var btnLogin = $('.btn-login');
+  var btnLogout = $('.btn-logout');
 
   var auth = new auth0.WebAuth({
     domain: AUTH0_DOMAIN,
@@ -32,12 +32,12 @@ $(document).ready(function() {
     userIsAuthenticated();
   }
 
-  btn_login.click(function(e) {
+  btnLogin.click(function(e) {
     e.preventDefault();
     login();
   });
 
-  btn_logout.click(function(e) {
+  btnLogout.click(function(e) {
     e.preventDefault();
     logout();
   });
