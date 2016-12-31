@@ -62,7 +62,7 @@ $(document).ready(function() {
   function getProfile(accessToken) {
     auth.client.userInfo(accessToken, function(err, profile) {
       if (err) { 
-        console.log(error);
+        console.log(err);
         return;
       }
       localStorage.setItem('profile', JSON.stringify(profile));
