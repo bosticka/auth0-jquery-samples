@@ -1,15 +1,14 @@
 $(document).ready(function() {
 
   var userProfile;
-  var API_URL = 'http://localhost:3001/api/';
-  
+
   var lock = new Auth0Lock(AUTH0_CLIENT_ID, AUTH0_DOMAIN, {
     oidcConformant: true,
     autoclose: true,
     auth: {
       redirectUrl: AUTH0_CALLBACK_URL,
       responseType: 'token id_token',
-      audience: API_ID,
+      audience: 'https://' + AUTH0_DOMAIN + '/userinfo',
       params: {
         scope: 'openid profile'
       }
@@ -38,21 +37,6 @@ $(document).ready(function() {
   $('#btn-profile').click(function(e) {
     e.preventDefault();
     showRoute('profile');
-  });
-
-  $('#btn-ping').click(function(e) {
-    e.preventDefault();
-    showRoute('ping');
-  });
-
-  $('#btn-call-public').click(function(e) {
-    e.preventDefault();
-    ping('public');
-  });
-
-  $('#btn-call-private').click(function(e) {
-    e.preventDefault();
-    securedPing('private');
   });
 
   if(isAuthenticated()) {
@@ -121,24 +105,24 @@ $(document).ready(function() {
   }
 
   function displayAsAuthenticated() {
-    ['#login-message', '#btn-login', '#ping-login-message']
+    ['#login-message', '#btn-login']
       .forEach(function(item) {
         $(item).hide();
       });
 
-    ['#logged-in-message', '#btn-logout', '#btn-profile', '#btn-ping']
+    ['#logged-in-message', '#btn-logout', '#btn-profile']
       .forEach(function(item) {
         $(item).show();
       });
   }
 
   function displayAsNotAuthenticated() {
-    ['#logged-in-message', '#btn-logout', '#btn-profile', '#btn-ping']
+    ['#logged-in-message', '#btn-logout', '#btn-profile']
       .forEach(function(item) {
         $(item).hide();
       });
 
-    ['#login-message', '#btn-login', '#ping-login-message']
+    ['#login-message', '#btn-login']
       .forEach(function(item) {
         $(item).show();
       });
@@ -149,30 +133,5 @@ $(document).ready(function() {
       $(this).hide();
     });
     $('#' + route).show();
-  }
-
-  function ping(route) {
-    $('#message').empty();
-    $.ajax({
-      url: API_URL + route,
-    }).done(function(data) {
-      $('#message').append(data.message);
-    });
-  }
-
-  function securedPing(route) {
-    $('#message').empty();
-    var accessToken = localStorage.getItem('access_token');
-    if (!accessToken) {
-      throw 'Access token must exist to fetch profile';
-    }
-    $.ajax({
-      url: API_URL + route,
-      beforeSend: function(xhr) {
-        xhr.setRequestHeader('Authorization', 'Bearer ' + accessToken);
-      }
-    }).done(function(data) {
-      $('#message').append(data.message);
-    });
   }
 });

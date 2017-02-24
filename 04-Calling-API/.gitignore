@@ -1,5 +1,4 @@
 .DS_Store
-bower_components
 auth0-variables.js
 node_modules
 .env

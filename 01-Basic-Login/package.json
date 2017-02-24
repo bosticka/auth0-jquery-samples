@@ -1,5 +1,5 @@
 {
-  "name": "calling-api",
+  "name": "login",
   "version": "0.0.0",
   "description": "This sample demonstrates how to add authentication to a jQuery application with Auth0.",
   "main": "app.js",

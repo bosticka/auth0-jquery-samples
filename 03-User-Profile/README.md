@@ -1,6 +1,6 @@
-# User Session Handling
+# Auth0 jQuery Login
 
-This sample demonstrates how to add user session management to a jQuery application with Auth0.
+This sample demonstrates how to add authentication to a jQuery application with Auth0.
 
 ## Running the App
 
@@ -8,8 +8,7 @@ Rename `auth0-variables.js.example` to `auth0-variables.js` and populate it with
 
 ```bash
 npm install -g serve
-cd path/to/project
-bower install
+cd 01-Login
 serve
 ```
 
