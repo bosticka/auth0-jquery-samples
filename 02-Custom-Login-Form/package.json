@@ -1,12 +1,17 @@
 {
-  "name": "basic-login",
+  "name": "custom-login-form",
   "version": "0.0.0",
   "description": "This sample demonstrates how to add authentication to a jQuery application with Auth0.",
   "main": "app.js",
   "author": "Auth0",
   "license": "MIT",
+  "scripts": {
+    "start": "serve"
+  },
   "dependencies": {
+    "auth0-js": "^8.2.0",
     "bootstrap": "^3.3.7",
-    "jquery": "^3.1.1"
+    "jquery": "^3.1.1",
+    "serve": "^3.4.1"
   }
 }

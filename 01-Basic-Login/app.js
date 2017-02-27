@@ -67,16 +67,26 @@ $(document).ready(function() {
   }
 
   function displayAsAuthenticated() {
-    $('#login-message').hide();
-    $('#logged-in-message').show();
-    $('#btn-login').hide();
-    $('#btn-logout').show();
+    ['#login-message', '#btn-login']
+      .forEach(function(item) {
+        $(item).hide();
+      });
+
+    ['#logged-in-message', '#btn-logout']
+      .forEach(function(item) {
+        $(item).show();
+      });
   }
 
   function displayAsNotAuthenticated() {
-    $('#login-message').show();
-    $('#logged-in-message').hide();
-    $('#btn-login').show();
-    $('#btn-logout').hide();
+    ['#logged-in-message', '#btn-logout']
+      .forEach(function(item) {
+        $(item).hide();
+      });
+
+    ['#login-message', '#btn-login']
+      .forEach(function(item) {
+        $(item).show();
+      });
   }
 });
