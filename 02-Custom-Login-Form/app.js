@@ -19,6 +19,10 @@ $(document).ready(function() {
       displayAsAuthenticated();
       $('#auth-form')[0].reset();
       showRoute('home');
+    }
+    if (err) {
+      window.location.hash = '';
+      alert('Error: ' + err.error);
     } else {
       displayAsNotAuthenticated();
     }
