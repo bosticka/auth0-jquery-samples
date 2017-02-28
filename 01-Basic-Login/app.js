@@ -23,6 +23,7 @@ $(document).ready(function() {
     oidcConformant: true,
     autoclose: true,
     auth: {
+      sso: false,
       redirectUrl: AUTH0_CALLBACK_URL,
       responseType: 'token id_token',
       audience: 'https://' + AUTH0_DOMAIN + '/userinfo'

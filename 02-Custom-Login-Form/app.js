@@ -105,6 +105,7 @@ $(document).ready(function() {
     localStorage.removeItem('access_token');
     localStorage.removeItem('id_token');
     localStorage.removeItem('expires_at');
+    webAuth.logout({client_id: AUTH0_CLIENT_ID, redirect_to: 'http://localhost:3000'})
     displayAsNotAuthenticated();
   }
 
